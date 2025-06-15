@@ -1,23 +1,28 @@
-'use client'
-
-import { useState } from "react"
+import { db } from "@/firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 function CreatePost() {
 
-    const [post, setPost] = useState("")
+    async function addPost(formData) {
+        "use server"
+
+        const post = formData.get("text")
+        await addDoc(collection(db, "posts"), {
+            post: post
+        })
+    }
+
   return (
     <div>
     <h1 className="font-bold text-x-l">CreatePost</h1>
-    <form>
-        <textarea 
-        onChange={(e) => setPost(e.target.value)}
+    <form action={addPost}>
+        <textarea name="text"
         className="border border-black w-[400px] h-[80px] resize-none"/>
         <br/>
         <button className="p-3 bg-blue-600 text-white w-full">Post</button>
     </form>
-
     </div>
-  )
+  );
 }
 
-export default CreatePost
+export default CreatePost;
